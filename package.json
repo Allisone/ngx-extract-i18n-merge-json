@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "ts-node node_modules/jasmine/bin/jasmine",
+    "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix"
   },
@@ -40,8 +40,7 @@
     "@types/jasmine": "^4.3.1",
     "@types/node": "^18.15.10",
     "jasmine": "^4.6.0",
-    "jasmine-node": "^1.16.0",
-    "karma-coverage": "^2.2.0"
+    "jasmine-node": "^1.16.0"
   },
   "peerDependencies": {
     "@angular-devkit/build-angular": "^13.0.0 || ^14.0.0 || ^15.0.0"
