@@ -33,12 +33,11 @@ async function extractI18nMergeBuilder(options: Options, context: BuilderContext
     if (!options.verbose) {
         console.debug = () => null; // prevent debug output from xml_normalize and xliff-simple-merge
     }
-    context.logger.debug(`options: ${jsonStringify(options)}`);
+    context.logger.debug(`options: ${JSON.stringify(options)}`);
     const outputPath = options.outputPath as string || '.';
 
     context.logger.info('running "extract-i18n" ...');
     const sourcePath = join(normalize(outputPath), options.sourceFile ?? 'messages.json');
-    const translationSourceFileOriginal = await readFileIfExists(sourcePath);
 
     const extractI18nRun = await context.scheduleBuilder(options.builderI18n ?? '@angular-devkit/build-angular:extract-i18n', {
         browserTarget: options.browserTarget,
@@ -81,6 +80,11 @@ function mergeTranslations(source: JsonTranslations, target: JsonTranslations, l
     target.locale = locale;
     if (!target.translations) {
         target.translations = {};
+    }
+    for (const id of Object.keys(target.translations)) {
+        if (!(id in source.translations)) {
+            delete target.translations[id];
+        }
     }
     for (const id of Object.keys(source.translations)) {
         if (!(id in target.translations)) {

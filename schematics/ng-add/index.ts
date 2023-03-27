@@ -39,7 +39,7 @@ export function ngAdd(_options: Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
         return updateWorkspace((workspace) => {
             const projectName = _options.project || Array.from(workspace.projects.keys())[0];
-            const projectWorkspace = workspace.projects.get(projectName)!;
+            const projectWorkspace = workspace.projects.get(projectName);
             if (!projectWorkspace) {
                 throw new SchematicsException(`Project ${projectName} not found!`);
             }
@@ -71,7 +71,7 @@ export function ngAdd(_options: Schema): Rule {
                 browserTarget,
                 newPrefix: '@new',
                 outputPath,
-                targetFiles: filesWithoutOutputPath.reduce((acc, curr, index) => {
+                targetFiles: filesWithoutOutputPath.reduce((acc, curr) => {
                     const localeMatch = curr.match(/\.([a-z]{2}(-[A-Z]{2})?)\./)
                     if (!localeMatch) {
                         console.error(`Could not determine locale from translation file ${curr}`);
