@@ -33,12 +33,12 @@ describe('ngAdd', () => {
     let appTree: UnitTestTree;
 
     beforeEach(async () => {
-        appTree = await runner.runExternalSchematic('@schematics/angular', 'workspace', workspaceOptions);
-        appTree = await runner.runExternalSchematic('@schematics/angular', 'application', appOptions, appTree);
+        appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
+        appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions, appTree).toPromise();
     });
 
     it('works', async () => {
-        const tree = await runner.runSchematic('ng-add', {}, appTree);
+        const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
             '          "builder": "ng-extract-i18n-merge-json:ng-extract-i18n-merge-json",\n' +
             '          "options": {\n' +
@@ -61,7 +61,7 @@ describe('ngAdd', () => {
         };
         appTree.overwrite('/angular.json', JSON.stringify(angularJson));
 
-        const tree = await runner.runSchematic('ng-add', {}, appTree);
+        const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
 
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
             '          "builder": "ng-extract-i18n-merge-json:ng-extract-i18n-merge-json",\n' +
