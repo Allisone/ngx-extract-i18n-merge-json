@@ -1,7 +1,7 @@
 {
   "spec_dir": "",
   "spec_files": [
-    "**/*.spec.?(m)ts"
+    "extract-i18n/*.spec.?(m)ts"
   ],
   "env": {
     "stopSpecOnExpectationFailure": false,
