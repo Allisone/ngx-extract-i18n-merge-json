@@ -1,8 +1,9 @@
-import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
+import { BuilderContext, BuilderOutput } from '@angular-devkit/architect';
 import { basename, dirname, join, JsonObject, normalize } from '@angular-devkit/core';
 import { promises as fs } from 'fs';
-import { readFileIfExists } from './fileUtils';
-import { jsonStringify } from './jsonFormatter';
+import { readFileIfExists } from './file-utils';
+import { jsonStringify } from './json-formatter';
+import { Translations, JsonTranslations } from './json-translations';
 
 export interface Options extends JsonObject {
     outputPath: string | null,
@@ -18,19 +19,26 @@ export interface Options extends JsonObject {
     verbose: boolean
 }
 
-export type Translations = { [key: string]: string };
-
-export interface JsonTranslations {
-    locale?: string,
-    translations: Translations,
+function mergeTranslations(source: JsonTranslations, target: JsonTranslations, locale: string, options: Options) {
+    const targetTranslations: Translations = {};
+    target.locale = locale;
+    if (!target.translations) {
+        target.translations = {};
+    }
+    for (const id of Object.keys(source.translations).sort()) {
+        if (id in target.translations) {
+            targetTranslations[id] = target.translations[id];
+        } else {
+            targetTranslations[id] = options.sourceLanguageTargetLocale === locale
+                ? source.translations[id]
+                : `${options.newPrefix} ${source.translations[id]}`
+        }
+    }
+    target.translations = targetTranslations;
 }
-
 export async function extractI18nMergeBuilder(options: Options, context: BuilderContext): Promise<BuilderOutput> {
     context.logger.info(`Running ng-extract-i18n-merge-json for project ${context.target?.project}`);
 
-    if (!options.verbose) {
-        console.debug = () => null; // prevent debug output from xml_normalize and xliff-simple-merge
-    }
     context.logger.debug(`options: ${JSON.stringify(options)}`);
     const outputPath = options.outputPath as string || '.';
 
@@ -72,22 +80,4 @@ export async function extractI18nMergeBuilder(options: Options, context: Builder
 
     context.logger.info('finished i18n merging and normalizing');
     return { success: true };
-}
-
-function mergeTranslations(source: JsonTranslations, target: JsonTranslations, locale: string, options: Options) {
-    const targetTranslations: Translations = {};
-    target.locale = locale;
-    if (!target.translations) {
-        target.translations = {};
-    }
-    for (const id of Object.keys(source.translations).sort()) {
-        if (id in target.translations) {
-            targetTranslations[id] = target.translations[id];
-        } else {
-            targetTranslations[id] = options.sourceLanguageTargetLocale === locale
-                ? source.translations[id]
-                : `${options.newPrefix} ${source.translations[id]}`
-        }
-    }
-    target.translations = targetTranslations;
 }

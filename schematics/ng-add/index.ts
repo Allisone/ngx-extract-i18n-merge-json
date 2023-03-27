@@ -1,19 +1,19 @@
-import {Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
-import {updateWorkspace} from '@schematics/angular/utility/workspace';
-import {Schema} from './schema';
-import {JsonObject, normalize, Path, relative} from '@angular-devkit/core';
-import {Options} from '../../command/builder';
+import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
+import { updateWorkspace } from '@schematics/angular/utility/workspace';
+import { Schema } from './schema';
+import { JsonObject, normalize, Path, relative } from '@angular-devkit/core';
+import { Options } from '../../extract-i18n/builder';
 
-type TargetFile = {locale: string, file: string};
+type TargetFile = { locale: string, file: string };
 
 function getTargetFiles(i18nExtension: JsonObject | undefined): TargetFile[] {
-    const locales = (i18nExtension?.locales ?? {}) as {[key: string]: string|JsonObject};
+    const locales = (i18nExtension?.locales ?? {}) as { [key: string]: string | JsonObject };
     return Object.keys(locales ?? {}).reduce((acc, locale) => {
         const file = typeof locales[locale] === 'string'
             ? locales[locale] as string
             : selectTargetFile((locales[locale] as JsonObject | undefined)?.translation as string | undefined);
         if (file) {
-            acc.push({locale, file});
+            acc.push({ locale, file });
         }
         return acc;
     }, [] as TargetFile[]);
@@ -73,7 +73,7 @@ export function ngAdd(_options: Schema): Rule {
             const browserTarget = existingI18nTargetOptions?.browserTarget as string | undefined ?? `${projectName}:build`;
 
             // remove path from files
-            const filesWithoutOutputPath = files?.map(f => ({...f, file: relative(`/${outputPath}` as Path, `/${f.file}` as Path)})) ?? [];
+            const filesWithoutOutputPath = files?.map(f => ({ ...f, file: relative(`/${outputPath}` as Path, `/${f.file}` as Path) })) ?? [];
 
             const target = projectWorkspace.targets.get('extract-i18n');
             const builderOptions: Partial<Options> = {
@@ -83,7 +83,7 @@ export function ngAdd(_options: Schema): Rule {
                 targetFiles: filesWithoutOutputPath.reduce((acc, f) => {
                     acc[f.locale] = f.file;
                     return acc
-                }, {} as {[key: string] : string})
+                }, {} as { [key: string]: string })
             };
 
             const outFileRelativeToOutputPath = getOutFileRelativeToOutputPath(existingI18nTargetOptions?.outFile as string | null ?? 'messages.json', outputPathFromExtractI18nOptions, outputPathFromTargetFiles, tree, outputPath);
@@ -92,12 +92,12 @@ export function ngAdd(_options: Schema): Rule {
             }
             if (target) {
                 context.logger.info(`Overwriting previous extract-i18n entry in project ${projectName}.`);
-                target.builder = 'ng-extract-i18n-merge-json:ng-extract-i18n-merge-json';
+                target.builder = 'ng-extract-i18n-merge-json:extract-i18n';
                 target.options = builderOptions;
             } else {
                 projectWorkspace.targets.add({
                     name: 'extract-i18n',
-                    builder: 'ng-extract-i18n-merge-json:ng-extract-i18n-merge-json',
+                    builder: 'ng-extract-i18n-merge-json:extract-i18n',
                     options: builderOptions,
                 });
             }

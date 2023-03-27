@@ -3,7 +3,7 @@
   "schematics": {
     "ng-add": {
       "description": "Add ng-extract-i18n-merge-json to the project and configure setup.",
-      "factory": "../dist/schematics/ng-add/index#ngAdd",
+      "factory": "../schematics/ng-add/index#ngAdd",
       "schema": "./ng-add/schema.json"
     }
   }

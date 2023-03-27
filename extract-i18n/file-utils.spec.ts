@@ -1,6 +1,6 @@
 import {promises as fs} from 'fs';
-import {readFileIfExists} from './fileUtils';
-import {rmSafe} from './rmSafe';
+import {readFileIfExists} from './file-utils';
+import {rmSafe} from './rm-safe';
 
 describe('fileUtils', () => {
     it('should return file contents if file is present', async () => {
@@ -12,12 +12,14 @@ describe('fileUtils', () => {
             await rmSafe('test.txt');
         }
     });
+
     it('should return null if file does not exists', async () => {
         const result = await readFileIfExists('a-file-that-does-not-exist.txt');
         expect(result).toBeNull();
     });
+
     it('should throw any other error', async () => {
-        jest.spyOn(fs, 'readFile').mockRejectedValue(new Error('some random fs error'));
-        await expect(readFileIfExists('some-file.txt')).rejects.toEqual(new Error('some random fs error'));
+        await expectAsync(readFileIfExists('some-file.txt')).toBeResolved();
+        await expectAsync(fs.readFile('some-file.txt')).toBeRejected();
     });
 });

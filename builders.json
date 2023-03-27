@@ -1,8 +1,8 @@
 {
   "builders": {
-    "ng-extract-i18n-merge-json": {
-      "implementation": "./command",
-      "schema": "./command/schema.json",
+    "extract-i18n": {
+      "implementation": "./extract-i18n",
+      "schema": "./extract-i18n/schema.json",
       "description": "Extract and merge i18n JSON translation units."
     }
   }

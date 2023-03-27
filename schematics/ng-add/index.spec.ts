@@ -27,7 +27,6 @@ function norm(s: string) {
 }
 
 describe('ngAdd', () => {
-
     const runner = new SchematicTestRunner('schematics', collectionPath);
 
     let appTree: UnitTestTree;
@@ -40,7 +39,7 @@ describe('ngAdd', () => {
     it('works', async () => {
         const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
-            '          "builder": "ng-extract-i18n-merge-json:ng-extract-i18n-merge-json",\n' +
+            '          "builder": "ng-extract-i18n-merge-json:extract-i18n",\n' +
             '          "options": {\n' +
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +
@@ -48,7 +47,6 @@ describe('ngAdd', () => {
             '            "targetFiles": {}\n' +
             '          }\n' +
             '        }'));
-        //expect(tree.files).toEqual([]);
     });
 
     it('should infer json', async () => {
@@ -64,7 +62,7 @@ describe('ngAdd', () => {
         const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
 
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
-            '          "builder": "ng-extract-i18n-merge-json:ng-extract-i18n-merge-json",\n' +
+            '          "builder": "ng-extract-i18n-merge-json:extract-i18n",\n' +
             '          "options": {\n' +
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +
