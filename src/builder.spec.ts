@@ -208,7 +208,6 @@ describe('Builder', () => {
             messagesFrBefore: {'banana': 'Banane'},
             messagesBefore: {'banana': 'Banana', 'apple': 'Apple'},
             options: {
-                sort: 'idAsc',
             },
             messagesFrExpected: {'apple': '@new Apple', 'banana': 'Banane'},
         });

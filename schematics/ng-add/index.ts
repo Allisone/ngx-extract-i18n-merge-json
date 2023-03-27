@@ -4,10 +4,21 @@ import {Schema} from './schema';
 import {JsonArray, JsonObject, normalize, Path, relative} from '@angular-devkit/core';
 import {Options} from '../../src/builder';
 
-function getTargetFiles(i18nExtension: JsonObject | undefined): string[] {
-    const locales = i18nExtension?.locales ? (Object.values(i18nExtension?.locales) as JsonArray | string[] | undefined) : undefined;
-    const files = locales?.map(locale => typeof locale === 'string' ? locale : selectTargetFile((locale as JsonObject | undefined)?.translation as string[] | string | undefined));
-    return files?.filter(f => f !== undefined) as string[] ?? [];
+type TargetFile = {locale: string, file: string};
+
+function getTargetFiles(i18nExtension: JsonObject | undefined): TargetFile[] {
+    console.log(i18nExtension);
+    throw new Error('asdasdasdasdasd');
+    const locales = (i18nExtension?.locales ?? {}) as {[key: string]: string|JsonObject};
+    return Object.keys(locales ?? {}).reduce((acc, locale) => {
+        const file = typeof locales[locale] === 'string'
+            ? locales[locale] as string
+            : selectTargetFile((locales[locale] as JsonObject | undefined)?.translation as string | undefined);
+        if (file) {
+            acc.push({locale, file});
+        }
+        return acc;
+    }, [] as TargetFile[]);
 }
 
 function selectTargetFile(translation: string[] | string | undefined): string | undefined {
@@ -57,28 +68,22 @@ export function ngAdd(_options: Schema): Rule {
             // infer outputPath
             const existingI18nTargetOptions = projectWorkspace.targets.get('extract-i18n')?.options;
             const outputPathFromExtractI18nOptions = existingI18nTargetOptions?.outputPath as string | undefined;
-            const outputPathFromTargetFiles: string | undefined = files?.[0]?.substring(0, files?.[0]?.lastIndexOf('/') ?? files?.[0]?.length);
+            const outputPathFromTargetFiles: string | undefined = files?.[0]?.file.substring(0, files?.[0]?.file.lastIndexOf('/') ?? files?.[0]?.file.length);
             const outputPath = normalize(outputPathFromExtractI18nOptions ?? outputPathFromTargetFiles ?? 'src/locales');
             context.logger.info(`inferred output path: ${outputPath}`);
 
             const browserTarget = existingI18nTargetOptions?.browserTarget as string | undefined ?? `${projectName}:build`;
 
             // remove path from files
-            const filesWithoutOutputPath = files?.map(f => relative(`/${outputPath}` as Path, `/${f}` as Path)) ?? [];
+            const filesWithoutOutputPath = files?.map(f => ({...f, file: relative(`/${outputPath}` as Path, `/${f.file}` as Path)})) ?? [];
 
             const target = projectWorkspace.targets.get('extract-i18n');
             const builderOptions: Partial<Options> = {
                 browserTarget,
                 newPrefix: '@new',
                 outputPath,
-                targetFiles: filesWithoutOutputPath.reduce((acc, curr) => {
-                    const localeMatch = curr.match(/\.([a-z]{2}(-[A-Z]{2})?)\./)
-                    if (!localeMatch) {
-                        console.error(`Could not determine locale from translation file ${curr}`);
-                        return acc;
-                    }
-                    const locale: string = localeMatch[1];
-                    acc[locale] = curr;
+                targetFiles: filesWithoutOutputPath.reduce((acc, f) => {
+                    acc[f.locale] = f.file;
                     return acc
                 }, {} as {[key: string] : string})
             };

@@ -45,18 +45,18 @@ describe('ngAdd', () => {
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +
             '            "outputPath": "src/locales",\n' +
-            '            "targetFiles": []\n' +
+            '            "targetFiles": {}\n' +
             '          }\n' +
             '        }'));
         //expect(tree.files).toEqual([]);
     });
 
     it('should infer json', async () => {
-        appTree.create('/src/other-path/messages.fr.json', '{"locale": "fr", "translations": {"group.id.label": "label"}}');
+        appTree.create('/src/other-path/messages.fr.json', '{"locale": "fr-FR", "translations": {"group.id.label": "label"}}');
         const angularJson = JSON.parse(appTree.readContent('/angular.json'));
         angularJson.projects.bar.i18n = {
             locales: {
-                'fr-FR': 'src/other-path/messages.fr.json'
+                'fr': 'src/other-path/messages.fr.json'
             }
         };
         appTree.overwrite('/angular.json', JSON.stringify(angularJson));
@@ -69,7 +69,7 @@ describe('ngAdd', () => {
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +
             '            "outputPath": "src/other-path",\n' +
-            '            "targetFiles": [ "messages.fr.json" ]\n' +
+            '            "targetFiles": {"fr": "messages.fr.json"}\n' +
             '          }\n' +
             '        }'));
     });
