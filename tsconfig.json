@@ -1,21 +1,27 @@
 {
-  "exclude": ["builder-test", "dist"],
+  "angularCompilerOptions": {
+    "preserveSymlinks": true
+  },
   "compilerOptions": {
-    "baseUrl": "tsconfig",
-    "target": "es6",
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmitOnError": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
     "sourceMap": true,
-    "strictNullChecks": true,
-    "types": ["node", "jasmine"]
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
   }
 }

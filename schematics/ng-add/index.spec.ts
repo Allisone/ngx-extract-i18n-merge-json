@@ -39,7 +39,7 @@ describe('ngAdd', () => {
     it('works', async () => {
         const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
-            '          "builder": "ng-extract-i18n-merge-json:extract-i18n",\n' +
+            '          "builder": "ngx-extract-i18n-merge-json:extract-i18n",\n' +
             '          "options": {\n' +
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +
@@ -62,7 +62,7 @@ describe('ngAdd', () => {
         const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
 
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
-            '          "builder": "ng-extract-i18n-merge-json:extract-i18n",\n' +
+            '          "builder": "ngx-extract-i18n-merge-json:extract-i18n",\n' +
             '          "options": {\n' +
             '            "browserTarget": "bar:build",\n' +
             '            "newPrefix": "@new",\n' +

@@ -37,7 +37,7 @@ function mergeTranslations(source: JsonTranslations, target: JsonTranslations, l
     target.translations = targetTranslations;
 }
 export async function extractI18nMergeBuilder(options: Options, context: BuilderContext): Promise<BuilderOutput> {
-    context.logger.info(`Running ng-extract-i18n-merge-json for project ${context.target?.project}`);
+    context.logger.info(`Running ngx-extract-i18n-merge-json for project ${context.target?.project}`);
 
     context.logger.debug(`options: ${JSON.stringify(options)}`);
     const outputPath = options.outputPath as string || '.';

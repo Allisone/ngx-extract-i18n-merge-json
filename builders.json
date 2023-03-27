@@ -1,7 +1,7 @@
 {
   "builders": {
     "extract-i18n": {
-      "implementation": "./extract-i18n",
+      "implementation": "./dist/extract-i18n",
       "schema": "./extract-i18n/schema.json",
       "description": "Extract and merge i18n JSON translation units."
     }

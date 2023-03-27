@@ -1,0 +1,11 @@
+.github/
+.idea/
+builder-test/
+coverage/
+*.ts
+!*.d.ts
+*.spec.*
+**/rmSafe.*
+jasmine*
+*.tgz
+tsconfig.json

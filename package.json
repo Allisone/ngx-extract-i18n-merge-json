@@ -1,6 +1,6 @@
 {
-  "name": "ng-extract-i18n-merge-json",
-  "version": "1.0.0",
+  "name": "ngx-extract-i18n-merge-json",
+  "version": "1.0.8",
   "description": "Extract and merge i18n JSON translation files for angular projects.",
   "main": "extract-i18n/index.js",
   "builders": "builders.json",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json.git"
+    "url": "https://github.com/karsa-mistmere/ngx-extract-i18n-merge-json.git"
   },
   "keywords": [
     "angular",
@@ -29,9 +29,9 @@
   "author": "Karsa Rigó",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json/issues"
+    "url": "https://github.com/karsa-mistmere/ngx-extract-i18n-merge-json/issues"
   },
-  "homepage": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json#readme",
+  "homepage": "https://github.com/karsa-mistmere/ngx-extract-i18n-merge-json#readme",
   "dependencies": {
     "@angular-devkit/architect": "^0.1301.0 || ^0.1401.0 || ^0.1501.0",
     "@angular-devkit/core": "^13.0.0 || ^14.0.0 || ^15.0.0",
@@ -39,8 +39,7 @@
     "@schematics/angular": "^13.0.0 || ^14.0.0 || ^15.0.0",
     "@types/jasmine": "^4.3.1",
     "@types/node": "^18.15.10",
-    "jasmine": "^4.6.0",
-    "jasmine-node": "^1.16.0"
+    "jasmine": "^4.6.0"
   },
   "peerDependencies": {
     "@angular-devkit/build-angular": "^13.0.0 || ^14.0.0 || ^15.0.0"

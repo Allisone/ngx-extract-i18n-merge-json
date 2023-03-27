@@ -14,8 +14,8 @@
       "default": "messages.json"
     },
     "targetFiles": {
-      "type": "array",
-      "items": {
+      "type": "object",
+      "additionalProperties": {
         "type": "string"
       },
       "description": "Translation files for each target language. Paths are assumed to be relative to 'outputPath'."

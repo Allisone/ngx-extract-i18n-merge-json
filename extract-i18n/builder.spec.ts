@@ -36,11 +36,11 @@ describe('Builder', () => {
         architectHost = new TestingArchitectHost(__dirname, __dirname);
         architect = new Architect(architectHost, registry);
 
-        architectHost.addBuilder('ng-extract-i18n-merge-json:extract-i18n', createBuilder(extractI18nMergeBuilder));
+        architectHost.addBuilder('ngx-extract-i18n-merge-json:extract-i18n', createBuilder(extractI18nMergeBuilder));
         architectHost.addTarget({
             project: 'builder-test',
             target: 'extract-i18n'
-        }, 'ng-extract-i18n-merge-json:extract-i18n');
+        }, 'ngx-extract-i18n-merge-json:extract-i18n');
         extractI18nBuilderMock = createBuilderSpy('extractI18nBuilderMock', true);
         architectHost.addBuilder('@angular-devkit/build-angular:extract-i18n', createBuilder(extractI18nBuilderMock.builder));
     });

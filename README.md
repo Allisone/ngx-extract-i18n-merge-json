@@ -1,6 +1,6 @@
 # Angular JSON extract i18n and merge
 
-Based on [`ng-extract-i18n-merge`](https://github.com/daniel-sc/ng-extract-i18n-merge) by @daniel-sc.
+Based on [`ngx-extract-i18n-merge`](https://github.com/daniel-sc/ngx-extract-i18n-merge) by @daniel-sc.
 
 This extends Angular CLI to improve the i18n extraction and merge workflow. New/removed translations are added/removed
 from the target translation files. Additionally, translation files are normalized (pretty print, sorted by id) so that
@@ -12,7 +12,7 @@ _Prerequisites_: i18n setup with defined target locales in `angular.json` - as
 documented [here](https://angular.io/guide/i18n-common-merge).
 
 ```shell
-ng add ng-extract-i18n-merge-json
+ng add ngx-extract-i18n-merge-json
 ```
 
 ## Usage

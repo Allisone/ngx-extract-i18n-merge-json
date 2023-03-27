@@ -58,7 +58,7 @@ export function ngAdd(_options: Schema): Rule {
             // alternative: search tree for *.json? --> not performant, contains node_modules
             const files = getTargetFiles(i18nExtension);
             if (!files?.length) {
-                context.logger.warn('Could not infer translation target files, please setup angular i18n and re-run `ng add ng-extract-i18n-merge-json`: https://angular.io/guide/i18n-common-merge#define-locales-in-the-build-configuration');
+                context.logger.warn('Could not infer translation target files, please setup angular i18n and re-run `ng add ngx-extract-i18n-merge-json`: https://angular.io/guide/i18n-common-merge#define-locales-in-the-build-configuration');
             } else {
                 context.logger.info('Found target translation files: ' + JSON.stringify(files));
             }
@@ -92,12 +92,12 @@ export function ngAdd(_options: Schema): Rule {
             }
             if (target) {
                 context.logger.info(`Overwriting previous extract-i18n entry in project ${projectName}.`);
-                target.builder = 'ng-extract-i18n-merge-json:extract-i18n';
+                target.builder = 'ngx-extract-i18n-merge-json:extract-i18n';
                 target.options = builderOptions;
             } else {
                 projectWorkspace.targets.add({
                     name: 'extract-i18n',
-                    builder: 'ng-extract-i18n-merge-json:extract-i18n',
+                    builder: 'ngx-extract-i18n-merge-json:extract-i18n',
                     options: builderOptions,
                 });
             }

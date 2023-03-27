@@ -3,10 +3,4 @@ dist
 node_modules
 examples
 coverage
-extract-i18n/*.js
-extract-i18n/*.d.ts
-extract-i18n/*.js.map
-schematics/**/*.js
-schematics/**/*.d.ts
-schematics/**/*.js.map
 builder-test/*.json

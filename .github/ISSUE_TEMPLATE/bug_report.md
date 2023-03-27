@@ -23,7 +23,7 @@ If applicable, add screenshots to help explain your problem.
  - Angular: [e.g. 14.0.4]
  - OS: [e.g. Win10]
  - nodejs: [e.g. 16.15.1]
- - ng-extract-i18n-merge version: [e.g. 2.1.0]
+ - ngx-extract-i18n-merge version: [e.g. 2.1.0]
 
 **Additional context**
 Add any other context about the problem here.
