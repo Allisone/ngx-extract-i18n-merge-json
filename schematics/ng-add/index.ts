@@ -1,7 +1,7 @@
 import {Rule, SchematicContext, SchematicsException, Tree} from '@angular-devkit/schematics';
 import {updateWorkspace} from '@schematics/angular/utility/workspace';
 import {Schema} from './schema';
-import {JsonArray, JsonObject, normalize, Path, relative} from '@angular-devkit/core';
+import {JsonObject, normalize, Path, relative} from '@angular-devkit/core';
 import {Options} from '../../src/builder';
 
 type TargetFile = {locale: string, file: string};

@@ -2,7 +2,7 @@ import {Architect, createBuilder} from '@angular-devkit/architect';
 import {TestingArchitectHost} from '@angular-devkit/architect/testing';
 import {schema} from '@angular-devkit/core';
 import {promises as fs} from 'fs';
-import builder, {Options, Translations} from './builder';
+import {extractI18nMergeBuilder, Options, Translations} from './builder';
 import {rmSafe} from './rmSafe';
 import {jsonStringify} from './jsonFormatter';
 import Mock = jest.Mock;
@@ -32,7 +32,7 @@ describe('Builder', () => {
         // This will either take a Node package name, or a path to the directory
         // for the package.json file.
         // await architectHost.addBuilderFromPackage('..');
-        await architectHost.addBuilder('ng-extract-i18n-merge-json:ng-extract-i18n-merge-json', builder);
+        await architectHost.addBuilder('ng-extract-i18n-merge-json:ng-extract-i18n-merge-json', createBuilder(extractI18nMergeBuilder));
         await architectHost.addTarget({
             project: 'builder-test',
             target: 'extract-i18n-merge-json'

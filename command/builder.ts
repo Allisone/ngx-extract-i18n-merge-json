@@ -25,10 +25,7 @@ export interface JsonTranslations {
     translations: Translations,
 }
 
-const builder: ReturnType<typeof createBuilder> = createBuilder(extractI18nMergeBuilder);
-export default builder;
-
-async function extractI18nMergeBuilder(options: Options, context: BuilderContext): Promise<BuilderOutput> {
+export async function extractI18nMergeBuilder(options: Options, context: BuilderContext): Promise<BuilderOutput> {
     context.logger.info(`Running ng-extract-i18n-merge-json for project ${context.target?.project}`);
 
     if (!options.verbose) {
