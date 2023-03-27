@@ -1,0 +1,54 @@
+{
+  "name": "ng-extract-i18n-merge-json",
+  "version": "1.0.0",
+  "description": "Extract and merge i18n JSON translation files for angular projects.",
+  "main": "index.js",
+  "builders": "builders.json",
+  "schematics": "./schematics/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "ng-update": {
+    "migrations": "./schematics/migrations/migrations.json"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepack": "tsc",
+    "test": "jest",
+    "test-coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json.git"
+  },
+  "keywords": [
+    "angular",
+    "i18n",
+    "json"
+  ],
+  "author": "Karsa Rigó",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json/issues"
+  },
+  "homepage": "https://github.com/karsa-mistmere/ng-extract-i18n-merge-json#readme",
+  "dependencies": {
+    "@angular-devkit/architect": "^0.1301.0 || ^0.1401.0 || ^0.1501.0",
+    "@angular-devkit/core": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "@angular-devkit/schematics": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "@schematics/angular": "^13.0.0 || ^14.0.0 || ^15.0.0",
+    "eslint": "^8.36.0",
+    "typescript-eslint": "^0.0.1-alpha.0"
+  },
+  "peerDependencies": {
+    "@angular-devkit/build-angular": "^13.0.0 || ^14.0.0 || ^15.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "~28.1.8",
+    "jest": "~28.1.3",
+    "ts-jest": "~28.0.8",
+    "ts-node": "~10.9.1",
+    "tslint": "~6.1.3",
+    "typescript": ">=4.5.0"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Translation extraction and merge for Angular.",
+  "description": "Extraction and merge options",
+  "type": "object",
+  "properties": {
+    "outputPath": {
+      "type": "string",
+      "description": "The file path where translation files are placed. If unset default config from extract-i18n target is used."
+    },
+    "sourceFile": {
+      "type": "string",
+      "description": "Translation source file. Path is assumed to be relative to 'outputPath'.",
+      "default": "messages.json"
+    },
+    "targetFiles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Translation files for each target language. Paths are assumed to be relative to 'outputPath'."
+    },
+    "sourceLanguageTargetFile": {
+      "type": "string",
+      "description": "If this is set (to one of the `targetFiles`), new translations in that target file won't include the newPrefix."
+    },
+    "removeIdsWithPrefix": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Remove translation units where the ID matches any of the given prefixes."
+    },
+    "newPrefix": {
+      "type": "string",
+      "description": "A prefix that will appear before new translation.",
+      "default": "@new"
+    },
+    "sort": {
+      "enum": [
+        "idAsc",
+        "stableAppendNew",
+        "stableAlphabetNew"
+      ],
+      "default": "idAsc",
+      "description": "Sorting of all translation units in source and target translation files."
+    },
+    "collapseWhitespace": {
+      "type": "boolean",
+      "default": true,
+      "description": "Collapsing of multiple whitespaces/line breaks in translation sources and targets."
+    },
+    "trim": {
+      "type": "boolean",
+      "default": false,
+      "description": "Trim translation sources and targets."
+    },
+    "browserTarget": {
+      "type": "string",
+      "description": "A browser builder target use for rendering the app shell in the format of `project:target[:configuration]`. You can also pass in more than one configuration name as a comma-separated list. Example: `project:target:production,staging`.",
+      "pattern": "^[^:\\s]+:[^:\\s]+(:[^\\s]+)?$"
+    },
+    "builderI18n": {
+      "type": "string",
+      "description": "The builder to use for i18n extraction. By default, this is `@angular-devkit/build-angular:extract-i18n`. Any custom builder should handle the same options as the default builder (browserTarget, outputPath, outFile, format, progress).",
+      "default": "@angular-devkit/build-angular:extract-i18n"
+    },
+    "verbose": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to log extended output to the console."
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "targetFiles",
+    "browserTarget"
+  ]
+}
