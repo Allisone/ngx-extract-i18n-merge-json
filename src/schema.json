@@ -36,15 +36,6 @@
       "description": "A prefix that will appear before new translation.",
       "default": "@new"
     },
-    "sort": {
-      "enum": [
-        "idAsc",
-        "stableAppendNew",
-        "stableAlphabetNew"
-      ],
-      "default": "idAsc",
-      "description": "Sorting of all translation units in source and target translation files."
-    },
     "collapseWhitespace": {
       "type": "boolean",
       "default": true,

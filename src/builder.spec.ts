@@ -2,7 +2,7 @@ import {Architect, createBuilder} from '@angular-devkit/architect';
 import {TestingArchitectHost} from '@angular-devkit/architect/testing';
 import {schema} from '@angular-devkit/core';
 import {promises as fs} from 'fs';
-import builder, {Options} from './builder';
+import builder, {Options, Translations} from './builder';
 import {rmSafe} from './rmSafe';
 import {jsonStringify} from './jsonFormatter';
 import Mock = jest.Mock;
@@ -10,9 +10,10 @@ import Mock = jest.Mock;
 const MESSAGES_JSON_PATH = 'builder-test/messages.json';
 const MESSAGES_FR_JSON_PATH = 'builder-test/messages.fr.json';
 
-const dummyContent = {locale: "en-US", translations: {"group.id.label": "Label"}};
-const dummyContentFr = {locale: "fr-FR", translations: {"group.id.label": "Étiqueter"}};
-const dummyContentFrNew = {locale: "fr-FR", translations: {"group.id.label": "@new Label"}};
+const dummyMessages: Translations = {"group.label": "Label"};
+const dummyMessagesFr: Translations = {"group.label": "Étiqueter"};
+const dummyMessagesFrNew: Translations = {"group.label": "@new Label"};
+
 
 describe('Builder', () => {
     let architect: Architect;
@@ -42,15 +43,18 @@ describe('Builder', () => {
 
     async function runTest(p: {
         sourceFilename?: string;
-        messagesBefore?: string;
-        messagesFrBefore?: string;
+        messagesBefore?: Translations;
+        messagesFrBefore?: Translations;
         options: Partial<Options>;
-        messagesExpected?: string;
-        messagesFrExpected?: string;
+        messagesExpected?: Translations;
+        messagesFrExpected?: Translations;
     }) {
         try {
             if (p.messagesBefore !== undefined) {
-                await fs.writeFile(p.sourceFilename ?? MESSAGES_JSON_PATH, p.messagesBefore, 'utf8');
+                await fs.writeFile(p.sourceFilename ?? MESSAGES_JSON_PATH, jsonStringify({
+                    locale: 'en-US',
+                    translations: p.messagesBefore,
+                }), 'utf8');
             } else {
                 try {
                     await rmSafe(p.sourceFilename ?? MESSAGES_JSON_PATH);
@@ -59,7 +63,10 @@ describe('Builder', () => {
                 }
             }
             if (p.messagesFrBefore !== undefined) {
-                await fs.writeFile(MESSAGES_FR_JSON_PATH, p.messagesFrBefore, 'utf8');
+                await fs.writeFile(MESSAGES_FR_JSON_PATH, jsonStringify({
+                    locale: 'fr-FR',
+                    translations: p.messagesFrBefore,
+                }), 'utf8');
             }
 
             // A "run" can have multiple outputs, and contains progress information.
@@ -82,11 +89,17 @@ describe('Builder', () => {
 
             if (p.messagesExpected !== undefined) {
                 const targetContent = await fs.readFile(p.sourceFilename ?? MESSAGES_JSON_PATH, 'utf8');
-                expect(targetContent).toEqual(p.messagesExpected)
+                expect(targetContent).toEqual(jsonStringify({
+                    locale: 'en-US',
+                    translations: p.messagesExpected,
+                }))
             }
             if (p.messagesFrExpected !== undefined) {
                 const targetContent = await fs.readFile(MESSAGES_FR_JSON_PATH, 'utf8');
-                expect(targetContent).toEqual(p.messagesFrExpected)
+                expect(targetContent).toEqual(jsonStringify({
+                    locale: 'fr-FR',
+                    translations: p.messagesFrExpected,
+                }))
             }
         } finally {
             await rmSafe(p.sourceFilename ?? MESSAGES_JSON_PATH);
@@ -113,7 +126,10 @@ describe('Builder', () => {
     });
 
     test('should use custom builder for i18n extraction when configured', async () => {
-        await fs.writeFile(MESSAGES_JSON_PATH, jsonStringify(dummyContent), 'utf8');
+        await fs.writeFile(MESSAGES_JSON_PATH, jsonStringify({
+            locale: 'en-US',
+            translations: dummyMessages,
+        }), 'utf8');
         const builderFn = jest.fn(() => ({success: true}));
         architectHost.addBuilder('@my/custom:builder', createBuilder(builderFn)); // custom builder
 
@@ -134,11 +150,17 @@ describe('Builder', () => {
 
     test('should succeed without a source file', async () => {
         architectHost.addBuilder('@angular-devkit/build-angular:extract-i18n', createBuilder(async () => {
-            await fs.writeFile(MESSAGES_JSON_PATH, jsonStringify(dummyContent), 'utf8');
+            await fs.writeFile(MESSAGES_JSON_PATH, jsonStringify({
+                locale: 'en-US',
+                translations: dummyMessages,
+            }), 'utf8');
             return {success: true};
         })); // dummy builder that only writes the source file
 
-        await fs.writeFile(MESSAGES_FR_JSON_PATH, jsonStringify(dummyContentFr), 'utf8');
+        await fs.writeFile(MESSAGES_FR_JSON_PATH, jsonStringify({
+            locale: 'fr-FR',
+            translations: dummyMessagesFr,
+        }), 'utf8');
 
         try {
             // A "run" can have multiple outputs, and contains progress information.
@@ -164,21 +186,41 @@ describe('Builder', () => {
 
     test('should add missing translation as new', async () => {
         await runTest({
-            messagesFrBefore: '',
-            messagesBefore: jsonStringify(dummyContent),
+            messagesBefore: dummyMessages,
             options: {
             },
-            messagesFrExpected: jsonStringify(dummyContentFrNew)
+            messagesFrExpected: dummyMessagesFrNew
         });
     });
 
     test('should not touch existing translation', async () => {
         await runTest({
-            messagesFrBefore: jsonStringify(dummyContentFr),
-            messagesBefore: jsonStringify(dummyContent),
+            messagesFrBefore: dummyMessagesFr,
+            messagesBefore: dummyMessages,
             options: {
             },
-            messagesFrExpected: jsonStringify(dummyContentFr)
+            messagesFrExpected: dummyMessagesFr
+        });
+    });
+
+    test('should order translations by ID', async () => {
+        await runTest({
+            messagesFrBefore: {'banana': 'Banane'},
+            messagesBefore: {'banana': 'Banana', 'apple': 'Apple'},
+            options: {
+                sort: 'idAsc',
+            },
+            messagesFrExpected: {'apple': '@new Apple', 'banana': 'Banane'},
+        });
+    });
+
+    test('should remove deleted translations', async () => {
+        await runTest({
+            messagesFrBefore: {'apple': 'Pomme', 'banana': 'Banane'},
+            messagesBefore: {'apple': 'Apple'},
+            options: {
+            },
+            messagesFrExpected: {'apple': 'Pomme'},
         });
     });
   
