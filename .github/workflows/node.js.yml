@@ -34,7 +34,7 @@ jobs:
     - run: npm i --package-lock-only "@angular-devkit/architect@${{ matrix.devkit-version }}" "@angular-devkit/core@${{ matrix.angular-version }}" "@angular-devkit/schematics@${{ matrix.angular-version }}" "@schematics/angular@${{ matrix.angular-version }}"
     - run: npm ci
     - run: npm run build
-    - run: npm run test-coverage
+    - run: npm run test
     - name: Coveralls
       uses: coverallsapp/github-action@v1.2.4
       with:
