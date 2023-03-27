@@ -7,8 +7,6 @@ import {Options} from '../../src/builder';
 type TargetFile = {locale: string, file: string};
 
 function getTargetFiles(i18nExtension: JsonObject | undefined): TargetFile[] {
-    console.log(i18nExtension);
-    throw new Error('asdasdasdasdasd');
     const locales = (i18nExtension?.locales ?? {}) as {[key: string]: string|JsonObject};
     return Object.keys(locales ?? {}).reduce((acc, locale) => {
         const file = typeof locales[locale] === 'string'
