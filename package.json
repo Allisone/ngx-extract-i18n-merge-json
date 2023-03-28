@@ -11,6 +11,9 @@
   "ng-update": {
     "migrations": "./schematics/migrations/migrations.json"
   },
+  "publishConfig": {
+    "@karsa-mistmere:registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "build": "tsc",
     "test": "ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json",
