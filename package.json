@@ -36,13 +36,13 @@
   },
   "homepage": "https://github.com/karsa-mistmere/ngx-extract-i18n-merge-json#readme",
   "dependencies": {
-    "@angular-devkit/architect": "^0.1501.0 || ^0.1601.0 || ^0.1701.0",
-    "@angular-devkit/core": "^15.0.0 || ^16.0.0 || ^17.0.0",
-    "@angular-devkit/schematics": "^15.0.0 || ^16.0.0 || ^17.0.0",
-    "@schematics/angular": "^15.0.0 || ^16.0.0 || ^17.0.0"
+    "@angular-devkit/architect": "^0.1301.0 || ^0.1401.0 || ^0.1501.0 || ^0.1601.0 || ^0.1701.0",
+    "@angular-devkit/core": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0",
+    "@angular-devkit/schematics": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0",
+    "@schematics/angular": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "peerDependencies": {
-    "@angular-devkit/build-angular": "^15.0.0 || ^16.0.0 || ^17.0.0"
+    "@angular-devkit/build-angular": "^13.0.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
     "@types/jasmine": "^5.1.4",
