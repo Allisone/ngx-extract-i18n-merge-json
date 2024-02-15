@@ -12,8 +12,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
-        angular-version: [13.1.4, 14.0.2, v15.0.3]
+        node-version: [20.x]
+        angular-version: [13.1.4, 14.0.2, v15.0.3, v16.2.12, v17.1.3]
         include:
           - angular-version: 13.1.4
             devkit-version: 0.1301.4
@@ -21,11 +21,15 @@ jobs:
             devkit-version: 0.1400.2
           - angular-version: v15.0.3
             devkit-version: 0.1500.3
+          - angular-version: 16.2.12
+            devkit-version: 0.1601.0
+          - angular-version: v17.1.3
+            devkit-version: 0.1701.0
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm i --package-lock-only "@angular-devkit/architect@${{ matrix.devkit-version }}" "@angular-devkit/core@${{ matrix.angular-version }}" "@angular-devkit/schematics@${{ matrix.angular-version }}" "@schematics/angular@${{ matrix.angular-version }}"

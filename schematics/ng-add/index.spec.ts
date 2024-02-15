@@ -3,6 +3,7 @@ import * as path from 'path';
 
 import {Schema as WorkspaceOptions} from '@schematics/angular/workspace/schema';
 import {Schema as ApplicationOptions, Style} from '@schematics/angular/application/schema';
+import {Tree} from "@angular-devkit/schematics";
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
@@ -32,12 +33,12 @@ describe('ngAdd', () => {
     let appTree: UnitTestTree;
 
     beforeEach(async () => {
-        appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'workspace', workspaceOptions).toPromise();
-        appTree = await runner.runExternalSchematicAsync('@schematics/angular', 'application', appOptions, appTree).toPromise();
+        appTree = await runExternalSchematic(runner, '@schematics/angular', 'workspace', workspaceOptions);
+        appTree = await runExternalSchematic(runner, '@schematics/angular', 'application', appOptions, appTree);
     });
 
     it('works', async () => {
-        const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
+        const tree = await runSchematic(runner, 'ng-add', {}, appTree);
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
             '          "builder": "ngx-extract-i18n-merge-json:extract-i18n",\n' +
             '          "options": {\n' +
@@ -59,7 +60,7 @@ describe('ngAdd', () => {
         };
         appTree.overwrite('/angular.json', JSON.stringify(angularJson));
 
-        const tree = await runner.runSchematicAsync('ng-add', {}, appTree).toPromise();
+        const tree = await runSchematic(runner, 'ng-add', {}, appTree);
 
         expect(norm(tree.readContent('/angular.json'))).toContain(norm('"extract-i18n": {\n' +
             '          "builder": "ngx-extract-i18n-merge-json:extract-i18n",\n' +
@@ -73,3 +74,57 @@ describe('ngAdd', () => {
     });
 })
 ;
+
+// Add legacy type support for versions before v16
+interface LegacySchematicTestRunner {
+    runSchematicAsync<SchematicSchemaT extends object>(
+        schematicName: string,
+        opts?: SchematicSchemaT,
+        tree?: Tree,
+    ): { toPromise(): Promise<UnitTestTree> };
+    runExternalSchematicAsync<SchematicSchemaT extends object>(
+        collectionName: string,
+        schematicName: string,
+        opts?: SchematicSchemaT,
+        tree?: Tree,
+    ): { toPromise(): Promise<UnitTestTree> };
+}
+
+// Add type support for v16+ when running with legacy versions
+interface CurrentSchematicTestRunner {
+    runSchematic<SchematicSchemaT extends object>(
+        schematicName: string,
+        opts?: SchematicSchemaT,
+        tree?: Tree,
+    ): Promise<UnitTestTree>;
+    runExternalSchematic<SchematicSchemaT extends object>(
+        collectionName: string,
+        schematicName: string,
+        opts?: SchematicSchemaT,
+        tree?: Tree,
+    ): Promise<UnitTestTree>;
+}
+
+function runSchematic<SchematicSchemaT extends object>(runner: SchematicTestRunner, schematicName: string, opts?: SchematicSchemaT, tree?: Tree): Promise<UnitTestTree> {
+    // current version (>=v16)
+    if ('runSchematic' in runner) {
+        return (runner as unknown as CurrentSchematicTestRunner).runSchematic(schematicName, opts, tree);
+    // legacy version (<v16)
+    } else if ('runSchematicAsync' in runner) {
+        return (runner as unknown as LegacySchematicTestRunner).runSchematicAsync(schematicName, opts, tree).toPromise();
+    } else {
+        throw new Error('Unsupported version of SchematicTestRunner');
+    }
+}
+
+function runExternalSchematic<SchematicSchemaT extends object>(runner: SchematicTestRunner, collectionName: string, schematicName: string, opts?: SchematicSchemaT, tree?: Tree): Promise<UnitTestTree> {
+    // current version (>=v16)
+    if ('runExternalSchematic' in runner) {
+        return (runner as unknown as CurrentSchematicTestRunner).runExternalSchematic(collectionName, schematicName, opts, tree);
+    // legacy version (<v16)
+    } else if ('runExternalSchematicAsync' in runner) {
+        return (runner as unknown as LegacySchematicTestRunner).runExternalSchematicAsync(collectionName, schematicName, opts, tree).toPromise();
+    } else {
+        throw new Error('Unsupported version of SchematicTestRunner');
+    }
+}
