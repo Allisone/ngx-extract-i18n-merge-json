@@ -76,7 +76,7 @@ describe('ngAdd', () => {
 ;
 
 // Add legacy support for versions before v16
-interface LegacySchematicTestRunner extends SchematicTestRunner {
+interface LegacySchematicTestRunner {
     /**
      * Legacy support.
      * @deprecated
